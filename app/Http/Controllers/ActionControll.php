@@ -22,7 +22,7 @@ class ActionControll extends Controller
         return view('BootstrapAdmin.pages.tables.simple', compact('thongtin'));
     }
     public function DataTable(){
-        return view('BootstrapAdmin.pages.tables.data');
+        return back();
     }
  //=============== END HOME ==================================//
 
@@ -60,23 +60,16 @@ class ActionControll extends Controller
     { 
         $thongtin = thongtin::orderBy('id', 'DESC')->get();
         $mess="";
-        if (isset($_POST['search']) && $_POST['table_search'] != "")
-         {
-            $data = truyen::where('TenTruyen', 'like', '%'.$_POST['table_search'].'%')->get();
-            foreach ($data as $dt) {
-               $thongtin = thongtin::where('id_truyen','=',$dt->id)->get();
-            }
-        }
 
            if(isset($_POST['submit'])){
                if ($_POST['chapter'] != "" && $_POST['number'] !="") {
                $add = new chapter;
-               $add->id_tentruyen = $_POST['id'];
+               $add->id_tentruyen = $id;
                $add->Chapter = $_POST['chapter'];
                $add->SoLuongHinh = $_POST['number'];
                $add->save();
 
-               $thongtin = thongtin::Where('id_truyen','=',$_POST['id'])->get();
+               $thongtin = thongtin::Where('id_truyen','=',$id)->get();
                foreach ($thongtin as $tt) {
                 $updateTT = thongtin::find($tt->id);
                 $updateTT->NewChapter = $_POST['chapter'];
@@ -85,6 +78,14 @@ class ActionControll extends Controller
                $mess = "Cập nhật thành công";
                }else $mess = "Cập nhật thất bại";
            }
+
+           if (isset($_POST['search']) && $_POST['table_search'] != "")
+         {
+            $data = truyen::where('TenTruyen', 'like', '%'.$_POST['table_search'].'%')->get();
+            foreach ($data as $dt) {
+               $thongtin = thongtin::where('id_truyen','=',$dt->id)->get();
+            }
+        }
            return view('BootstrapAdmin.pages.forms.Update',['thongtin'=>$thongtin, 
                     'mess'=>$mess]);
     }
@@ -221,7 +222,7 @@ class ActionControll extends Controller
       //====================/ CHAPTER /============//
     public function chapter($id)
     {
-        $data = truyen::where('id',$id)->get();
+        $data = thongtin::where('id_truyen',$id)->get();
         $chapter = chapter::where('id_tentruyen',$id)->OrderBy('id','DESC')->get();
         $CTone="";
         foreach ($chapter as $k) {
@@ -239,4 +240,38 @@ class ActionControll extends Controller
         return view('Demo', compact('data'));
     }
      //====================/ END DEMO /============//
+
+     public function DeleteTruyen($id){
+         $thongtin = thongtin::where('id_truyen',$id);
+         if(isset($thongtin)){
+         $thongtin->delete();
+         }
+         $chapter = chapter::where('id_tentruyen',$id);
+         if(isset($chapter)){
+         $chapter->delete();
+         }
+         $truyen = truyen::find($id);
+         $truyen->delete();
+         return back();
+     }
+     public function DeleteChapter($id){
+        $idChapter = 0;
+        $idTruyen = 0;
+        $findId = chapter::where('id',$id)->get();
+        if (isset($findId)) {
+            foreach ($findId as $ct) {
+                $idChapter = $ct->Chapter;
+                $idTruyen = $ct->id_tentruyen;
+            }
+            $thongtin = thongtin::find($idTruyen);
+            $thongtin->NewChapter = $idChapter - 1;
+            $thongtin->save();
+
+        }
+         $chapter = chapter::find($id);
+         if (isset($chapter)) {
+            $chapter->delete();
+         }
+         return back();
+     }
 }

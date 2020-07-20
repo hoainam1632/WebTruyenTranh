@@ -79,8 +79,12 @@
                     <td>{{$ct->truyen->TenTruyen}}</td>
                     <td>{{$ct->truyen->theloai->TenTheLoai}}</td>  
                     <td>{{$ct->Chapter}}</td>
+                    @if ($ct->SoLuongHinh == 0)
+                    <td><a href="updateLink/{{$ct->id}}">Cập nhật hình</a></td> 
+                    @else
                     <td>{{$ct->SoLuongHinh}}</td>
-                    <td><a href="updateLink/{{$ct->id}}">Cập nhật</a></td>                             
+                    @endif      
+                    <td><a href="deleteChapter/{{$ct->id}}">Xóa</a></td>                                 
                     </tr>  
                   @endforeach 
                 @endif

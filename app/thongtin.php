@@ -8,7 +8,7 @@ class thongtin extends Model
 {
     protected $table = 'thongtin';
     protected $primaryKey = 'id';
-    public $timestamps = false;
+    public $timestamps = true;
 
     public function truyen()
     {

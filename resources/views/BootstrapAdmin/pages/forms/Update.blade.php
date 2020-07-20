@@ -4,7 +4,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Cập nhật Chapter mới</h1>
+            <h1>Thêm Chapter mới</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -25,20 +25,18 @@
             <!-- general form elements -->
             <div class="card card-primary">
               <div class="card-header">
-                <h3 class="card-title">Cập nhật chapter</h3>
+                <h3 class="card-title">Thêm chapter</h3>
               </div>
               <!-- /.card-header -->
               <!-- form start -->
                 <div class="card-body">
                   <div class="form-group">
                     <label>Tên truyện</label>
-                    <select name="id">
                       @if (isset($data))                     
                        @foreach ($data as $dt)
-                         <option value="{{$dt->id}}">{{$dt->TenTruyen}}</option>
+                       <input type="text" name="name" value="{{$dt->TenTruyen}}" disabled="true" class="form-control">
                         @endforeach
                       @endif
-                    </select>
                   </div>
                   <div class="form-group">
                     <label >Chapter</label>
@@ -87,18 +85,21 @@
           <th>Tác giả</th>
           <th>Thể loại</th>
           <th>Chapter mới nhất</th>
+          <th>Ngày cập nhật</th>
           {{-- <th>Link truyen</th> --}}
         </tr>
       </thead>
       <tbody>
         @if (isset($thongtin))
+        <?php $i=0;?>
         @foreach ($thongtin as $tt)  
             <tr>
-            <td>{{$tt->id}}</td>
+            <td>{{$i++}}</td>
             <td>{{$tt->truyen->TenTruyen}}</td>   
             <td>{{$tt->truyen->TacGia}}</td>
             <td>{{$tt->truyen->theloai->TenTheLoai}}</td>    
-            <td>Chapter: {{$tt->NewChapter}}</td>    
+            <td>Chapter: {{$tt->NewChapter}}</td>   
+            <td>{{$tt->updated_at}}</td> 
             <td><a href="update/{{$tt->truyen->id}}">Thêm tập</a></td>  
             </tr>  
         @endforeach 

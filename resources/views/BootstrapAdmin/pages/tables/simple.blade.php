@@ -39,6 +39,7 @@
                     <td>{{$tt->truyen->theloai->TenTheLoai}}</td>   
                     <td>{{$tt->truyen->TacGia}}</td>
                     <td>{{$tt->NewChapter}}</td>
+                    <td><a href="deleteTruyen/{{$tt->truyen->id}}">Xóa</a></td>
                   </tr>  
                     @endforeach 
                     @endif
